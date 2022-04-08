@@ -26,4 +26,12 @@ CREATE TABLE dishes (
     price INT NOT NULL CHECK (price >= 0)
 );
 
+DROP TABLE IF EXISTS clients_restaurant;
+CREATE TABLE clients_restaurant (
+    id SERIAL PRIMARY KEY,
+    client_id INT NOT NULL REFERENCES clients(id),
+    restaurant_id INT NULL REFERENCES restaurants(id),
+    visit_date DATE NOT NULL
+);
+
 COMMIT;
