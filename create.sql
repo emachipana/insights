@@ -34,4 +34,10 @@ CREATE TABLE clients_restaurant (
     visit_date DATE NOT NULL
 );
 
+DROP TABLE IF EXISTS restaurant_dishes;
+CREATE TABLE restaurant_dishes (
+    id SERIAL PRIMARY KEY,
+    restaurant_id INT NOT NULL REFERENCES restaurants(id),
+    dish_id INT NOT NULL REFERENCES dishes(id)
+);
 COMMIT;
