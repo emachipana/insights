@@ -54,4 +54,11 @@ CSV.foreach("data.csv", headers: true) do |row|
     }
 
     clients_restaurant = insert("clients_restaurant", clients_restaurant_data)
+
+    restaurant_dishes_data ={
+        "restaurant_id" => restaurants["id"],
+        "dish_id" => dishes["id"]
+    }
+
+    restaurant_dishes = insert("restaurant_dishes", restaurant_dishes_data)
 end
