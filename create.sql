@@ -10,4 +10,13 @@ CREATE TABLE clients (
     nationality VARCHAR NOT NULL
 );
 
+DROP TABLE IF EXISTS restaurants;
+CREATE TABLE restaurants (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    category VARCHAR NOT NULL,
+    adress VARCHAR NOT NULL,
+    city VARCHAR NOT NULL
+);
+
 COMMIT;
