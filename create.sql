@@ -19,4 +19,11 @@ CREATE TABLE restaurants (
     city VARCHAR NOT NULL
 );
 
+DROP TABLE IF EXISTS dishes;
+CREATE TABLE dishes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    price INT NOT NULL CHECK (price >= 0)
+);
+
 COMMIT;
