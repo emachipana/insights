@@ -19,3 +19,15 @@ def find(table, column, value)
         WHERE #{column} = '#{value.gsub("'", "''")}';
         ]).first
 end
+
+CSV.foreach("data.csv", headers: true) do |row|
+    clients_data = {
+        "name" => row["client_name"],
+        "age" => row["age"],
+        "genre" => row["gender"],
+        "occupation" => row["occupation"],
+        "nationality" => row["nationality"]
+    }
+
+    clients = insert("clients", clients_data, "name")
+end
