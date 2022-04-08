@@ -4,61 +4,61 @@ require "csv"
 DB = PG.connect(dbname: "insights")
 
 def insert(table, data, unique_column = nil)
-    entity = nil
+  entity = nil
 
-    entity = find(table, unique_column, data[unique_column]) if (unique_column)
+  entity = find(table, unique_column, data[unique_column]) if unique_column
 
-    entity ||=  DB.exec(%[INSERT INTO #{table} (#{data.keys.join(', ')})
-        VALUES (#{data.values.map { |value| "'#{value.gsub("'","''")}'"}.join(", ")})
+  entity ||= DB.exec(%[INSERT INTO #{table} (#{data.keys.join(', ')})
+        VALUES (#{data.values.map { |value| "'#{value.gsub("'", "''")}'" }.join(', ')})
         RETURNING *;]).first
-    entity
+  entity
 end
 
 def find(table, column, value)
-    DB.exec(%[SELECT * FROM #{table}
+  DB.exec(%(SELECT * FROM #{table}
         WHERE #{column} = '#{value.gsub("'", "''")}';
-        ]).first
+        )).first
 end
 
 CSV.foreach("data.csv", headers: true) do |row|
-    clients_data = {
-        "name" => row["client_name"],
-        "age" => row["age"],
-        "genre" => row["gender"],
-        "occupation" => row["occupation"],
-        "nationality" => row["nationality"]
-    }
+  clients_data = {
+    "name" => row["client_name"],
+    "age" => row["age"],
+    "genre" => row["gender"],
+    "occupation" => row["occupation"],
+    "nationality" => row["nationality"]
+  }
 
-    clients = insert("clients", clients_data, "name")
+  clients = insert("clients", clients_data, "name")
 
-    restaurants_data = {
-        "name" => row["restaurant_name"],
-        "category" => row["category"],
-        "adress" => row["address"],
-        "city" => row["city"]
-    }
+  restaurants_data = {
+    "name" => row["restaurant_name"],
+    "category" => row["category"],
+    "adress" => row["address"],
+    "city" => row["city"]
+  }
 
-    restaurants = insert("restaurants", restaurants_data, "name")
+  restaurants = insert("restaurants", restaurants_data, "name")
 
-    dishes_data = {
-        "name" => row["dish"],
-        "price" => row["price"]
-    }
+  dishes_data = {
+    "name" => row["dish"],
+    "price" => row["price"]
+  }
 
-    dishes = insert("dishes", dishes_data, "name")
+  dishes = insert("dishes", dishes_data, "name")
 
-    clients_restaurant_data = {
-        "client_id" => clients["id"],
-        "restaurant_id" => restaurants["id"],
-        "visit_date" => row["visit_date"]
-    }
+  clients_restaurant_data = {
+    "client_id" => clients["id"],
+    "restaurant_id" => restaurants["id"],
+    "visit_date" => row["visit_date"]
+  }
 
-    clients_restaurant = insert("clients_restaurant", clients_restaurant_data)
+  insert("clients_restaurant", clients_restaurant_data)
+  
+  restaurant_dishes_data = {
+    "restaurant_id" => restaurants["id"],
+    "dish_id" => dishes["id"]
+  }
 
-    restaurant_dishes_data ={
-        "restaurant_id" => restaurants["id"],
-        "dish_id" => dishes["id"]
-    }
-
-    restaurant_dishes = insert("restaurant_dishes", restaurant_dishes_data)
+  insert("restaurant_dishes", restaurant_dishes_data)
 end
