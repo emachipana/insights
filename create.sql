@@ -22,22 +22,24 @@ CREATE TABLE restaurants (
 DROP TABLE IF EXISTS dishes;
 CREATE TABLE dishes (
     id SERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL,
-    price INT NOT NULL CHECK (price >= 0)
-);
-
-DROP TABLE IF EXISTS clients_restaurant;
-CREATE TABLE clients_restaurant (
-    id SERIAL PRIMARY KEY,
-    client_id INT NOT NULL REFERENCES clients(id),
-    restaurant_id INT NULL REFERENCES restaurants(id),
-    visit_date DATE NOT NULL
+    name VARCHAR NOT NULL
 );
 
 DROP TABLE IF EXISTS restaurant_dishes;
 CREATE TABLE restaurant_dishes (
     id SERIAL PRIMARY KEY,
     restaurant_id INT NOT NULL REFERENCES restaurants(id),
-    dish_id INT NOT NULL REFERENCES dishes(id)
+    dish_id INT NOT NULL REFERENCES dishes(id),
+    price INT NOT NULL CHECK (price >= 0)
 );
 COMMIT;
+
+
+DROP TABLE IF EXISTS clients_restaurant;
+CREATE TABLE clients_restaurant (
+    id SERIAL PRIMARY KEY,
+    client_id INT NOT NULL REFERENCES clients(id),
+    restaurant_dishes_id INT NOT NULL REFERENCES restaurant_dishes(id),
+    visit_date DATE NOT NULL
+);
+

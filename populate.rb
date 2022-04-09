@@ -41,24 +41,25 @@ CSV.foreach("data.csv", headers: true) do |row|
   restaurants = insert("restaurants", restaurants_data, "name")
 
   dishes_data = {
-    "name" => row["dish"],
-    "price" => row["price"]
+    "name" => row["dish"]
   }
 
   dishes = insert("dishes", dishes_data, "name")
 
+  restaurant_dishes_data = {
+    "restaurant_id" => restaurants["id"],
+    "dish_id" => dishes["id"],
+    "price" => row["price"]
+  }
+
+  restaurant_dishes = insert("restaurant_dishes", restaurant_dishes_data)
+
   clients_restaurant_data = {
     "client_id" => clients["id"],
-    "restaurant_id" => restaurants["id"],
+    "restaurant_dishes_id" => restaurant_dishes["id"],
     "visit_date" => row["visit_date"]
   }
 
   insert("clients_restaurant", clients_restaurant_data)
   
-  restaurant_dishes_data = {
-    "restaurant_id" => restaurants["id"],
-    "dish_id" => dishes["id"]
-  }
-
-  insert("restaurant_dishes", restaurant_dishes_data)
 end
