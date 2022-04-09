@@ -69,7 +69,9 @@ class RestInsights
 
     def list_of_restaurants(action)
         result = list unless action
+        result = list_with_filter(action) if action
         generate_table(result, "List of restaurants")
+    end
 
     def list
         @db.exec(
@@ -79,7 +81,22 @@ class RestInsights
     end
 
     def list_with_filter(action)
-
+        type, value = action.split("=")
+        case type
+        when "category"
+            result = @db.exec(%[
+               SELECT name, category, city
+               FROM restaurants
+               WHERE category = '#{value}'; 
+            ])
+        when "city"
+            result = @db.exec(%[
+                SELECT name, category, city
+                FROM restaurants
+                WHERE city = #{value};
+            ])
+        end
+        result
     end
 
     #list of restaurants: end
