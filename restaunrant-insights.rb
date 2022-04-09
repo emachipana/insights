@@ -17,7 +17,7 @@ class RestInsights
             case option
             when "menu" then menu
             when "1" then list_of_restaurants(action)
-            when "2" then puts "list of dishes here"
+            when "2" then puts list_of_dishes
             when "3" then puts "distribution users here"
             when "4" then puts "top ten by visitors here"
             when "5" then puts "top ten by sales here"
@@ -87,7 +87,7 @@ class RestInsights
             result = @db.exec(%[
                SELECT name, category, city
                FROM restaurants
-               WHERE category = '#{value}'; 
+               WHERE category LIKE '%#{value}%'; 
             ])
         when "city"
             result = @db.exec(%[
@@ -100,6 +100,17 @@ class RestInsights
     end
 
     #list of restaurants: end
+
+    #list of dishes: start
+
+    def list_of_dishes
+        result = @db.exec(
+            "SELECT name FROM dishes;"
+        )
+        generate_table(result, "List of dishes")
+    end
+
+    #list of dishes: end
 end
 
 app = RestInsights.new
