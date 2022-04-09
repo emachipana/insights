@@ -1,4 +1,5 @@
 require "pg"
+require "terminal-table"
 
 class RestInsights
     def initialize
@@ -15,7 +16,7 @@ class RestInsights
         until option == "exit"
             case option
             when "menu" then menu
-            when "1" then puts "list of restaurants here"
+            when "1" then list_of_restaurants
             when "2" then puts "list of dishes here"
             when "3" then puts "distribution users here"
             when "4" then puts "top ten by visitors here"
@@ -56,14 +57,26 @@ class RestInsights
         puts "-" * 5 
     end
 
+    def generate_table(result_query, title)
+        table = Terminal::Table.new
+        table.title = title
+        table.headings = result_query.fields
+        table.rows = result_query.values
+        puts table
+    end
+
     # list of restaurants: start
 
     def list_of_restaurants(action = nil)
-        
+        result = list unless action
+        generate_table(result, "List of restaurants")
     end
 
     def list
-
+        @db.exec(
+            "SELECT name, category, city
+            FROM restaurants;"
+        )
     end
 
     #list of restaurants: end
