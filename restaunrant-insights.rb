@@ -25,7 +25,7 @@ class RestInsights
             when "7" then puts "avg consumer expenses here"
             when "8" then puts "total sales by month here"
             when "9" then puts "best price for dish here"
-            when "10" then puts "favorite dish here"
+            when "10" then favorite_dish(action)
             else puts "Enter a valid option please"
             end
             print "> "
@@ -124,10 +124,31 @@ class RestInsights
         ])
         generate_table(result, "Number and Distribution of Users")
     end
-
-    # ALTER TABLE clients RENAME COLUMN genre TO gender <-- rename column genre to gender
     
     #num and distribution of users: end
+
+    #favorite_dish: start
+
+    def favorite_dish(action)
+    type, value = action.split("=")
+    result = @db.exec(%[
+        SELECT c.#{type}, d.name AS dish , COUNT(*)
+        FROM clients AS c
+        JOIN clients_restaurant AS cr
+        ON cr.client_id = c.id
+        JOIN restaurant_dishes AS rd
+        ON cr.restaurant_dishes_id = rd.id
+        JOIN dishes AS d
+        ON rd.dish_id = d.id
+        WHERE c.#{type} = '#{value}'
+        GROUP BY #{type}, dish
+        ORDER BY count 
+        DESC LIMIT 1;
+    ])
+    generate_table(result, "Favorite dish")
+    end
+
+    #favorite_dish: end
 end
 
 app = RestInsights.new
