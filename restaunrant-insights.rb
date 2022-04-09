@@ -16,7 +16,7 @@ class RestInsights
         until option == "exit"
             case option
             when "menu" then menu
-            when "1" then list_of_restaurants
+            when "1" then list_of_restaurants(action)
             when "2" then puts "list of dishes here"
             when "3" then puts "distribution users here"
             when "4" then puts "top ten by visitors here"
@@ -67,16 +67,19 @@ class RestInsights
 
     # list of restaurants: start
 
-    def list_of_restaurants(action = nil)
+    def list_of_restaurants(action)
         result = list unless action
         generate_table(result, "List of restaurants")
-    end
 
     def list
         @db.exec(
             "SELECT name, category, city
             FROM restaurants;"
         )
+    end
+
+    def list_with_filter(action)
+
     end
 
     #list of restaurants: end
