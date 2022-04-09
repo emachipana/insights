@@ -12,7 +12,7 @@ class RestInsights
         menu
         puts "\n"
         print "> "
-        option, action = gets.chomp.split
+        option, action = gets.chomp.split(" ", 2)
         until option == "exit"
             case option
             when "menu" then menu
@@ -29,7 +29,7 @@ class RestInsights
             else puts "Enter a valid option please"
             end
             print "> "
-            option, action = gets.chomp.split
+            option, action = gets.chomp.split(" ", 2)
         end
     end
 
