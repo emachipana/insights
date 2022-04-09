@@ -55,6 +55,18 @@ class RestInsights
             ]
         puts "-" * 5 
     end
+
+    # list of restaurants: start
+
+    def list_of_restaurants(action = nil)
+        
+    end
+
+    def list
+
+    end
+
+    #list of restaurants: end
 end
 
 app = RestInsights.new
