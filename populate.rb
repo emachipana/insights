@@ -61,5 +61,4 @@ CSV.foreach("data.csv", headers: true) do |row|
   }
 
   insert("clients_restaurant", clients_restaurant_data)
-  
 end
