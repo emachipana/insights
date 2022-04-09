@@ -17,8 +17,8 @@ class RestInsights
             case option
             when "menu" then menu
             when "1" then list_of_restaurants(action)
-            when "2" then puts list_of_dishes
-            when "3" then puts "distribution users here"
+            when "2" then list_of_dishes
+            when "3" then num_dist_user(action)
             when "4" then puts "top ten by visitors here"
             when "5" then puts "top ten by sales here"
             when "6" then puts "top ten by avg per user here"
@@ -111,7 +111,26 @@ class RestInsights
     end
 
     #list of dishes: end
+
+    #num and distribution of users: start
+    
+    def num_dist_user(action)
+        type, value = action.split("=")
+        result = @db.exec(%[
+            SELECT #{value}, COUNT(*),
+            CONCAT((COUNT(*) * 100 / (SELECT COUNT(*) FROM clients)), '%')
+            AS percentage
+            FROM clients GROUP BY #{value};
+        ])
+        generate_table(result, "Number and Distribution of Users")
+    end
+
+    # ALTER TABLE clients RENAME COLUMN genre TO gender <-- rename column genre to gender
+    
+    #num and distribution of users: end
 end
 
 app = RestInsights.new
 app.start
+
+# SELECT genre, COUNT(*), (COUNT(*)*100/(SELECT COUNT(*) FROM clients)) AS percentage FROM clients GROUP BY genre;
