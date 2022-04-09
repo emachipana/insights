@@ -24,7 +24,7 @@ CSV.foreach("data.csv", headers: true) do |row|
   clients_data = {
     "name" => row["client_name"],
     "age" => row["age"],
-    "genre" => row["gender"],
+    "gender" => row["gender"],
     "occupation" => row["occupation"],
     "nationality" => row["nationality"]
   }
