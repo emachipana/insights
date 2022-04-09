@@ -132,5 +132,3 @@ end
 
 app = RestInsights.new
 app.start
-
-# SELECT genre, COUNT(*), (COUNT(*)*100/(SELECT COUNT(*) FROM clients)) AS percentage FROM clients GROUP BY genre;
