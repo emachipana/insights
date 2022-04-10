@@ -235,11 +235,12 @@ class RestInsights
 
   def top_ten_average_expense
     result = @db.exec(%[
-            SELECT c.name , ROUND(AVG(rd.price), 1) AS "avg expense" FROM clients AS c
+            SELECT r.name , ROUND(AVG(rd.price), 1) AS "avg expense" FROM clients AS c
             JOIN clients_restaurant AS cr ON cr.client_id=c.id
             JOIN restaurant_dishes AS rd ON rd.id=cr.restaurant_dishes_id
-            GROUP BY c.name
-            ORDER BY "avg expense" DESC
+            JOIN restaurants as r ON r.id =rd.restaurant_id
+            GROUP BY r.name
+            ORDER BY "avg expense" DESC 
             LIMIT 10;
         ])
     generate_table(result, "Top 10 restaurants by average expense per user")
